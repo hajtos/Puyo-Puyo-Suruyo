@@ -7,7 +7,7 @@ class BoardFrame(Frame):
     #----table HEIGHTxWIDTH
     BORDER_COLOR = Colors.GREEN
     BOARD_COLOR = Colors.BLACK
-    COLORS = [Colors.WHITE, Colors.PURPLE, \
+    COLORS = [Colors.WHITE, Colors.LIGHTGREEN, \
         Colors.BLUE, Colors.YELLOW, Colors.ORANGE, Colors.RED]
 
     def __init__(self, windown, start_x, \
