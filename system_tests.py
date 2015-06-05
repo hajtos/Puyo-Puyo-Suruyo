@@ -11,7 +11,7 @@ sanity check on any changes in the code
 
 
 import unittest
-from puyo.System import GameMap
+from puyo.system.game_map import GameMap
 
 class DummyGame(object):
     """
@@ -23,13 +23,13 @@ class DummyGame(object):
         """
         self.score = 0
 
-    def restartGame(self):
+    def restart_game(self):
         """
         just a dummy
         """
         pass
 
-    def getScore(self, combo, cells):
+    def get_score(self, combo, cells):
         """
         just a dummy
         """
@@ -44,20 +44,20 @@ class GameSystemTester(unittest.TestCase):
         creating the new GameMap object before each test
         small size is easier to check
         """
-        self.game = GameMap.GameMap(DummyGame(), size=(3, 4))
+        self.game = GameMap(DummyGame(), size=(3, 4))
 
     def test_stacking(self):
         """
         tests whether the group stack correctly
         """
-        self.game.placeAt(1, (2, 1))
-        self.game.placeAt(1, (2, 2))
-        self.game.placeAt(1, (1, 1))
-        self.game.placeAt(2, (2, 3))
-        self.game.placeAt(2, (2, 0))
-        self.game.placeAt(2, (1, 2))
-        self.game.placeAt(0, (1, 0))
-        self.assertEquals(self.game.getMap(), [[None, None, None, None], \
+        self.game.place_at(1, (2, 1))
+        self.game.place_at(1, (2, 2))
+        self.game.place_at(1, (1, 1))
+        self.game.place_at(2, (2, 3))
+        self.game.place_at(2, (2, 0))
+        self.game.place_at(2, (1, 2))
+        self.game.place_at(0, (1, 0))
+        self.assertEquals(self.game.get_map(), [[None, None, None, None], \
             [0, 1, 2, None], [2, 1, 1, 2]])
         self.assertEquals(self.game.cells[2][0].group.size(), 1)
         self.assertEquals(self.game.cells[2][1].group.size(), 3)
@@ -68,28 +68,28 @@ class GameSystemTester(unittest.TestCase):
         """
         checks if group deletion works as it should
         """
-        self.game.placeAt(1, (2, 0))
-        self.game.placeAt(1, (2, 1))
-        self.game.placeAt(1, (2, 2))
-        self.game.placeAt(1, (2, 3))
-        self.game.placeAt(2, (1, 2))
-        self.game.placeAt(1, (1, 3))
-        self.assertEquals(self.game.getMap(), [\
+        self.game.place_at(1, (2, 0))
+        self.game.place_at(1, (2, 1))
+        self.game.place_at(1, (2, 2))
+        self.game.place_at(1, (2, 3))
+        self.game.place_at(2, (1, 2))
+        self.game.place_at(1, (1, 3))
+        self.assertEquals(self.game.get_map(), [\
             [None, None, None, None], \
             [None, None, 2, 1], \
             [1, 1, 1, 1]])
-        self.assertEquals(len(self.game.to_delete), 1)
-        self.assertEquals(self.game.to_delete[0].size(), 5)
-        self.game.deleteStored()
-        self.assertEquals(self.game.getMap(), [\
+        self.assertEquals(len(self.game.memory["to_delete"]), 1)
+        self.assertEquals(self.game.memory["to_delete"][0].size(), 5)
+        self.game.delete_stored()
+        self.assertEquals(self.game.get_map(), [\
             [None, None, None, None], \
             [None, None, 2, None], \
             [None, None, None, None]])
-        self.assertEquals(len(self.game.moving), 1)
-        self.assertEquals(self.game.moving[0].cells(), [(1, 2)])
-        self.assertTrue(self.game.halted)
+        self.assertEquals(len(self.game.memory["moving"]), 1)
+        self.assertEquals(self.game.memory["moving"][0].cells(), [(1, 2)])
+        self.assertTrue(self.game.memory["halted"])
         self.game.tick()
-        self.assertEquals(self.game.getMap(), [\
+        self.assertEquals(self.game.get_map(), [\
             [None, None, None, None], \
             [None, None, None, None], \
             [None, None, 2, None]])
@@ -100,37 +100,37 @@ class GameSystemTester(unittest.TestCase):
         """
         self.game.tick()
         self.game.tick()
-        self.assertEquals(len(self.game.moving), 2)
-        colors = (self.game.cells[0][1].getGroup().color, \
-            self.game.cells[0][2].getGroup().color)
-        self.assertEquals(self.game.getMap(), [\
+        self.assertEquals(len(self.game.memory["moving"]), 2)
+        colors = (self.game.cells[0][1].get_group().color, \
+            self.game.cells[0][2].get_group().color)
+        self.assertEquals(self.game.get_map(), [\
             [None, colors[0], colors[1], None], \
             [None, None, None, None], \
             [None, None, None, None]])
-        self.game.keyMove(1)
-        self.assertEquals(self.game.getMap(), [\
+        self.game.key_move(1)
+        self.assertEquals(self.game.get_map(), [\
             [None, None, colors[0], colors[1]], \
             [None, None, None, None], \
             [None, None, None, None]])
-        self.game.keyMove(1)
-        self.assertEquals(self.game.getMap(), [\
+        self.game.key_move(1)
+        self.assertEquals(self.game.get_map(), [\
             [None, None, colors[0], colors[1]], \
             [None, None, None, None], \
             [None, None, None, None]])
-        self.game.keyMove(-1)
-        self.game.keyMove(-1)
-        self.assertEquals(self.game.getMap(), [\
+        self.game.key_move(-1)
+        self.game.key_move(-1)
+        self.assertEquals(self.game.get_map(), [\
             [colors[0], colors[1], None, None], \
             [None, None, None, None], \
             [None, None, None, None]])
         self.game.rotate()
-        self.assertEquals(self.game.getMap(), [\
+        self.assertEquals(self.game.get_map(), [\
             [None, colors[0], None, None], \
             [None, colors[1], None, None], \
             [None, None, None, None]])
-        self.game.keyMove(-1)
+        self.game.key_move(-1)
         self.game.rotate()
-        self.assertEquals(self.game.getMap(), [\
+        self.assertEquals(self.game.get_map(), [\
             [colors[0], None, None, None], \
             [colors[1], None, None, None], \
             [None, None, None, None]])

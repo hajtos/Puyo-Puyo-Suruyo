@@ -11,14 +11,14 @@ class TextFrame(object):
         self.basic_font = pygame.font.SysFont(self.BASICFONT_NAME, \
             self.basic_font_size)
 
-    def makeText(self, text, color, bgcolor, top, left):
+    def make_text(self, text, color, bgcolor, corner_pos):
         '''create the Surface and Rect objects for text.'''
         text_surf = self.basic_font.render(text, True, color, bgcolor)
         text_rect = text_surf.get_rect()
-        text_rect.topleft = (top, left)
+        text_rect.topleft = corner_pos
         return (text_surf, text_rect)
 
-    def changeFont(self, name, size):
+    def change_font(self, name, size):
         self.basic_font_size = size
         self.basic_font = pygame.font.SysFont(name, \
             self.basic_font_size)

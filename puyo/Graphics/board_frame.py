@@ -1,5 +1,5 @@
-from .Frame import Frame
-from .Colors import COLORS as Colors
+from .frame import Frame
+from .colors import COLORS as Colors
 import pygame
 
 class BoardFrame(Frame):
@@ -10,37 +10,37 @@ class BoardFrame(Frame):
     COLORS = [Colors.WHITE, Colors.LIGHTGREEN, \
         Colors.BLUE, Colors.YELLOW, Colors.ORANGE, Colors.RED]
 
-    def __init__(self, windown, start_x, \
-            start_y, window_height, window_width):
+    def __init__(self, windown, start, window_height, window_width):
         self.cell_height = 0
         self.cell_width = 0
         self.border_size = 0
-        Frame.__init__(self, windown, (start_x, start_y), \
-            window_height, window_width, self.BORDER_COLOR, self.BOARD_COLOR)
+        Frame.__init__(self, windown, start, \
+            (window_height, window_width), \
+            (self.BORDER_COLOR, self.BOARD_COLOR))
 
-    def setSize(self, size):
-        self.cell_height = self.board_height/size[1]
-        self.cell_width = self.board_width/size[0]
+    def set_size(self, size):
+        self.cell_height = self.board_size[0]/size[1]
+        self.cell_width = self.board_size[1]/size[0]
         return self
 
-    def setBorder(self, size, color):
+    def set_border(self, size, color):
         self.border_size = size
         BoardFrame.BORDER_COLOR = color
         return self
 
-    def drawMap(self, game_map):
+    def draw_map(self, game_map):
         Frame.draw(self)
         for i, row in enumerate(game_map):
             for j, color in enumerate(row):
                 if color is not None:
-                    self.drawElement(color, i, j)
+                    self.draw_element(color, i, j)
 
-    def drawElement(self, color, ypos, xpos):
+    def draw_element(self, color, ypos, xpos):
         '''draw one element on board'''
         pygame.draw.ellipse(
             self.display_surf,
             self.COLORS[color],
-            (self.board_x+xpos*self.cell_height, \
-                self.board_y+ypos*self.cell_width, \
+            (self.board_pos[0]+xpos*self.cell_height, \
+                self.board_pos[1]+ypos*self.cell_width, \
                 self.cell_height, self.cell_width),
             0)

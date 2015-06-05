@@ -54,7 +54,7 @@ class Group(object):
         """
         self.positions = [pos for pos in self.positions if pos != removed]
 
-    def addColorless(self, positions):
+    def add_colorless(self, positions):
         """
         adds a list of colorless elements to the colorless neigbours
 
@@ -62,7 +62,7 @@ class Group(object):
         """
         self.colorless += positions
 
-    def updateMap(self):
+    def update_map(self):
         """
         update the map of the GameMap object, setting itself as the group
         in positions of its elements

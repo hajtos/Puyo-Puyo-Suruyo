@@ -1,14 +1,14 @@
 
 class PlayerController(object):
     '''holder of player key controlls'''
-    def __init__(self, left, right, rotate_left, rotate_right, speed):
-        self.left = left
-        self.right = right
-        self.rotate_left = rotate_left
-        self.rotate_right = rotate_right
-        self.speed = speed
+    def __init__(self, keys):
+        self.left = keys[0]
+        self.right = keys[1]
+        self.rotate_left = keys[2]
+        self.rotate_right = keys[3]
+        self.speed = keys[4]
 
-    def getByKeyUp(self, key, player_number):
+    def get_by_key_up(self, key, player_number):
         if key == self.left:
             return ['player', player_number, 'move', 'left']
         elif key == self.right:
@@ -22,7 +22,7 @@ class PlayerController(object):
         else:
             return None
 
-    def getByKeyDown(self, key, player_number):
+    def get_by_key_down(self, key, player_number):
         if key == self.speed:
             return ['player', player_number, 'speed', 'up']
         else:

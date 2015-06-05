@@ -38,13 +38,13 @@ class MapCell(object):
         #print candidates
         return [cell for cell in candidates if cell.group is not None]
 
-    def setGroup(self, group):
+    def set_group(self, group):
         """
         a setter for the group attribute
         """
         self.group = group
 
-    def getGroup(self):
+    def get_group(self):
         """
         a getter for the group attribute
         """

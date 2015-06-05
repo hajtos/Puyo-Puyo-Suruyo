@@ -5,33 +5,31 @@ class Frame(object):
     BORDER_SIZE = 5
 
     def __init__(self, windown, start_pos, \
-            height, width, frame_color, board_color):
+            size, colors):
         #main windown
         self.display_surf = windown
         #starting point of gameboard + border
-        self.frame_x = start_pos[0]
-        self.frame_y = start_pos[1]
+        self.frame_pos = start_pos
         #gameboard + border size in pixels
-        self.frame_height = height
-        self.frame_width = width
+        self.frame_size = size
         #set colors
-        self.border_color = frame_color
-        self.frame_color = board_color
+        self.border_color = colors[0]
+        self.frame_color = colors[1]
         #starting point of gameboard
-        self.board_x = self.frame_x+self.BORDER_SIZE
-        self.board_y = self.frame_y+self.BORDER_SIZE
+        self.board_pos = (self.frame_pos[0]+self.BORDER_SIZE, \
+            self.frame_pos[1]+self.BORDER_SIZE)
         #gameboard size in pixels
-        self.board_height = self.frame_height-2*self.BORDER_SIZE
-        self.board_width = self.frame_width-2*self.BORDER_SIZE
+        self.board_size = (self.frame_size[0]-2*self.BORDER_SIZE, \
+            self.frame_size[1]-2*self.BORDER_SIZE)
 
     def draw(self):
-        self.drawBorder()
-        self.drawBoard()
+        self.draw_border()
+        self.draw_board()
 
-    def drawBorder(self):
+    def draw_border(self):
         pygame.draw.rect(self.display_surf, self.border_color, \
-            [self.frame_x, self.frame_y, self.frame_height, self.frame_width])
+            self.frame_pos+self.frame_size)
 
-    def drawBoard(self):
+    def draw_board(self):
         pygame.draw.rect(self.display_surf, self.frame_color, \
-            [self.board_x, self.board_y, self.board_height, self.board_width])
+            self.board_pos+self.board_size)
